@@ -43,69 +43,6 @@ function configController() {
         device = devices.items[0];
       }
 
-      let output;
-
-      // Get SpeakerTrack/Best Overview Status
-      output = await webexService.getField(
-        req.session.access_token,
-        `xapi/status?deviceId=${device.id}&name=Cameras.SpeakerTrack.Status`,
-      );
-
-      device.speakerTrack = output.result.Cameras.SpeakerTrack.Status;
-
-      if (device.speakerTrack !== 'Active') {
-        device.ptz = true;
-      }
-
-      // Get System State
-      output = await webexService.getField(
-        req.session.access_token,
-        `xapi/status?deviceId=${device.id}&name=SystemUnit.State.*`,
-      );
-
-      // Determine Call Status
-      if (output.result.SystemUnit.State.NumberOfActiveCalls > 0) {
-        device.callstatus = 'In Call';
-        device.incall = true;
-      } else if (output.result.SystemUnit.State.NumberOfInProgressCalls > 0) {
-        device.callstatus = 'Pending Call';
-        device.incall = true;
-      } else {
-        device.callstatus = 'Idle';
-      }
-
-      if (device.incall) {
-        // Get Call Data
-        output = await webexService.getField(
-          req.session.access_token,
-          `xapi/status?deviceId=${device.id}&name=Call[*].*`,
-        );
-
-        // Update Call Info in Device Object
-        switch (output.result.Call.length) {
-          case 0:
-            debug('not in call');
-            break;
-          case 1:
-            debug('single call');
-            device.callnumber = output.result.Call[0].CallbackNumber;
-            device.calldisplay = output.result.Call[0].DisplayName;
-            break;
-          default:
-            debug('multiple calls');
-            device.callnumber = 'Multiple';
-            device.calldisplay = 'Multiple';
-        }
-      }
-
-      // Get SelfView Status
-      /* output = await webexService.getField(
-        req.session.access_token,
-        `xapi/status?deviceId=${device.id}&name=Video.SelfView.*`,
-      ); */
-
-      // debug(output.result);
-
       // Determine Device Status
       switch (device.connectionStatus) {
         case 'connected':
@@ -116,6 +53,82 @@ function configController() {
         default:
           device.status = 'Offline';
           device.online = false;
+      }
+
+      // Pull xAPI Stats if device is online
+      if (device.online) {
+        let output;
+
+        try {
+          // Get SpeakerTrack/Best Overview Status
+          output = await webexService.getField(
+            req.session.access_token,
+            `xapi/status?deviceId=${device.id}&name=Cameras.SpeakerTrack.Status`,
+          );
+
+          device.speakerTrack = output.result.Cameras.SpeakerTrack.Status;
+
+          if (device.speakerTrack !== 'Active') {
+            device.ptz = true;
+          }
+        } catch {
+          debug(`unable to get speakertrack for ${device.displayName}`);
+        }
+
+        try {
+          // Get System State
+          output = await webexService.getField(
+            req.session.access_token,
+            `xapi/status?deviceId=${device.id}&name=SystemUnit.State.*`,
+          );
+
+          // Determine Call Status
+          if (output.result.SystemUnit.State.NumberOfActiveCalls > 0) {
+            device.callstatus = 'In Call';
+            device.incall = true;
+          } else if (
+            output.result.SystemUnit.State.NumberOfInProgressCalls > 0
+          ) {
+            device.callstatus = 'Pending Call';
+            device.incall = true;
+          } else {
+            device.callstatus = 'Idle';
+          }
+
+          if (device.incall) {
+            // Get Call Data
+            output = await webexService.getField(
+              req.session.access_token,
+              `xapi/status?deviceId=${device.id}&name=Call[*].*`,
+            );
+
+            // Update Call Info in Device Object
+            switch (output.result.Call.length) {
+              case 0:
+                debug('not in call');
+                break;
+              case 1:
+                debug('single call');
+                device.callnumber = output.result.Call[0].CallbackNumber;
+                device.calldisplay = output.result.Call[0].DisplayName;
+                break;
+              default:
+                debug('multiple calls');
+                device.callnumber = 'Multiple';
+                device.calldisplay = 'Multiple';
+            }
+          }
+        } catch {
+          debug(`unable to get system state for ${device.displayName}`);
+        }
+
+        // Get SelfView Status
+        /* output = await webexService.getField(
+          req.session.access_token,
+          `xapi/status?deviceId=${device.id}&name=Video.SelfView.*`,
+        ); */
+
+        // debug(output.result);
       }
 
       // Render Config Page
