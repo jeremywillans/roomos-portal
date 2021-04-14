@@ -1,6 +1,6 @@
 # Webex RoomOS Portal
 
-This application was created as a mechanism of managing Cloud registered RoomOS Devices. 
+This application was created as a mechanism of managing Cisco Webex Cloud registered RoomOS Devices. 
 
 Currently, it provides a simple portal with the following remote capabilities
 - Listing of all Organisation Devices
