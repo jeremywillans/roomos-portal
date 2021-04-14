@@ -127,6 +127,8 @@ function configController() {
       });
     } catch (error) {
       debug(`error encountered: ${error}`);
+      const errorText = 'Unable to retrieve devices.';
+      res.render('error', { title: 'Error', errorText });
     }
   }
 

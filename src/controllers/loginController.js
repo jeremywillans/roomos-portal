@@ -69,7 +69,8 @@ function loginController() {
       res.redirect('/config');
     } catch (error) {
       debug(error);
-      res.send('<h1>OAuth Integration could not complete</h1><p>Sorry, could not retreive your access token. Try again...</p>');
+      const errorText = 'Could not retrieve your access token.';
+      res.render('error', { title: 'Error', errorText });
     }
   }
 
