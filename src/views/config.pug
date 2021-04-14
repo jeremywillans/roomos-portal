@@ -1,0 +1,99 @@
+extends layout
+
+block extra-head
+  link(rel='stylesheet/less' type='text/css' href='/css/dpad.css')
+  link(rel="stylesheet" href="/css/select2.min.css")
+  script(src='/js/less.js' type='text/javascript')
+  script(src="/js/jquery.min.js")
+  script(src='/js/config.js')
+  script(src="/js/select2.min.js")
+  meta(http-equiv='refresh' content='60')
+  
+block layout-content
+  div.View.UserView
+    div.Banner 
+      h2.Heading Howdy, #{person.displayName}!
+      img.Avatar(src=person.avatar)
+    div.Config
+      div.Title
+        h2 Device Configuration
+      //pre.Details=JSON.stringify(userProfile, null, 2)
+      //pre.Details=JSON.stringify(deviceListing,null, 2)
+
+      select#device.select2(style='width: 100%')
+        option(value='' selected=true) Select Device...
+        each item in devices
+          // option(type=item.product status=item.connectionStatus value=item.id) #{item.displayName}
+          option(value=item.id) #{item.displayName}
+      br
+      br
+      input#deviceId(type='hidden' value=device.id)
+      table.DeviceInfo
+        tr
+          th Device
+          td #{device.displayName}
+        tr
+          th Status
+          td #{device.status}, #{device.callstatus}
+            if device.incall
+              button#endCall.RowButton End
+        if device.incall
+          tr
+            th Call Display 
+            td #{device.calldisplay}
+          tr
+            th Call Number 
+            td #{device.callnumber}
+        tr
+          th Type 
+          td #{device.product}
+        tr
+          th Serial 
+          td #{device.serial}
+        tr
+          th IP Address 
+          td #{device.ip}
+        tr
+          th SW Version 
+          td #{device.software}
+        tr
+          th SW Channel 
+          td #{device.upgradeChannel}
+        tr
+          th Camera Track 
+          td#trackState #{device.speakerTrack}
+            button#trackToggle.RowButton Toggle
+      br
+      if device.online && !device.incall
+        div.InputDial
+          input#dialString.InputBox(placeholder='Enter Dial String...')
+          button#dialSubmit.InputButton Dial
+      //div.Controls
+        div.set
+          nav.o-pad
+            a#up.up(href='#')
+            a#right.right(href='#')
+            a#down.down(href='#')
+            a#left.left(href='#')
+        div.set
+          nav.d-pad
+            a#zoomin.up(href='#')
+            a.right(href='#')
+            a#zoomout.down(href='#')
+            a.left(href='#')
+      //br
+      //label.switch
+        input#best(type='checkbox')
+        span.slider.round
+      if device.online && device.ptz
+        div#controls
+          button#up.button U
+          button#down.button D
+          button#left.button L
+          button#right.button R
+          button#zoomin.button +
+          button#zoomout.button -
+
+    div.NavButtons
+      a(href="/logout")
+        div.NavButton Log out

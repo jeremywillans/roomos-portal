@@ -1,0 +1,13 @@
+extends layout
+
+block layout-content
+  div.View.UserView
+    h2.Banner RoomOS Portal
+    div.Message
+      div.Title
+        h2 Cisco Webex
+        h3 RoomOS Device Portal
+      span.Details #{errorText}
+    div.NavButtons
+        a(href="/logout")
+          div.NavButton Log out
