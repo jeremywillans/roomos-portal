@@ -29,12 +29,12 @@ function webexService() {
           }
           // Check the call is successful
           if (response.status !== 200) {
-            debug(`could not send the message, /rooms returned: ${response.status}`);
+            debug(`could not complete request, /people returned: ${response.status}`);
             reject(response.status);
           }
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/rooms/
+          // Check JSON payload is compliant with specs
           if ((!response.data)) {
-            debug('could not parse message details: bad json payload or could not find an id.');
+            debug('could not parse message details: bad or invalid json payload.');
             reject(new Error('invalid json data'));
           }
           try {
@@ -46,7 +46,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -74,12 +74,12 @@ function webexService() {
           }
           // Check the call is successful
           if (response.status !== 200) {
-            debug(`could not send the message, /${apiName} returned: ${response.status}`);
+            debug(`could not complete request, /${apiName} returned: ${response.status}`);
             reject(response.status);
           }
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/rooms/
+          // Check JSON payload is compliant with specs
           if ((!response.data)) {
-            debug('could not parse message details: bad json payload or could not find an id.');
+            debug('could not parse message details: bad or invalid json payload.');
             reject(new Error('invalid json'));
           }
           try {
@@ -102,7 +102,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -138,9 +138,9 @@ function webexService() {
             debug(`could not post the command, /${command} returned: ${response.status}`);
             reject(response.status);
           }
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/rooms/
+          // Check JSON payload is compliant with specs
           if ((!response.data)) {
-            debug('could not parse message details: bad json payload or could not find an id.');
+            debug('could not parse message details: bad or invalid json payload.');
             reject(new Error('invalid json'));
           }
           try {
@@ -152,7 +152,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -182,9 +182,9 @@ function webexService() {
             debug(`could not send the message, /messages returned: ${response.status}`);
             reject(response.status);
           }
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/rooms/
+          // Check JSON payload is compliant with specs
           if ((!response.data)) {
-            debug('could not parse message details: bad json payload or could not find an id.');
+            debug('could not parse message details: bad or invalid json payload.');
             reject(response.status);
           }
           try {
@@ -196,7 +196,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -257,7 +257,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -303,7 +303,7 @@ function webexService() {
             return;
           }
 
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/rooms/
+          // Check JSON payload is compliant with specs
           if ((!response.data) || (!response.data.access_token) || (!response.data.refresh_token)) {
             debug('could not parse message details: bad json payload or could not find access codes.');
             reject(new Error('invalid json'));
@@ -317,7 +317,7 @@ function webexService() {
           }
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -339,13 +339,13 @@ function webexService() {
         .then((response) => {
           // Check the call is successful
           if (response.status !== 200) {
-            debug(`could not send the message, /webhooks returned: ${response.statusCode}`);
+            debug(`could not process the request, /webhooks returned: ${response.statusCode}`);
             return;
           }
 
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/people/me
+          // Check JSON payload is compliant with specs
           if (!response.data) {
-            debug('could not parse message details: bad json payload');
+            debug('could not parse message details: bad or invalid json payload.');
             return;
           }
 
@@ -364,13 +364,13 @@ function webexService() {
                 .then((responseDel) => {
                   // Check the call is successful
                   if (responseDel.status !== 204) {
-                    debug(`could not send the message, /webhook delete returned: ${response.status} and ${response.data}`);
+                    debug(`could not process request, /webhook delete returned: ${response.status} and ${response.data}`);
                     return;
                   }
                   debug('deleted webhook');
                 })
                 .catch((error) => {
-                  debug(`could not reach Cisco Webex to send message, error: ${error}`);
+                  debug(`error encountered: ${error}`);
                   reject(error);
                 });
             }
@@ -378,7 +378,7 @@ function webexService() {
           resolve();
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
@@ -409,11 +409,11 @@ function webexService() {
         .then((response) => {
           // Check the call is successful
           if (response.status !== 200) {
-            debug(`could not send the message, /webhooks returned: ${response.status}`);
+            debug(`could not process the request, /webhooks returned: ${response.status}`);
             return;
           }
 
-          // Check JSON payload is compliant with specs https://webexapis.com/v1/people/me
+          // Check JSON payload is compliant with specs
           if ((!response.data) || (!response.data.id)) {
             debug('could not parse message details: bad json payload or could not find an id.');
             reject(new Error('invalid response'));
@@ -422,7 +422,7 @@ function webexService() {
           resolve();
         })
         .catch((error) => {
-          debug(`could not reach Cisco Webex to send message, error: ${error}`);
+          debug(`error encountered: ${error}`);
           reject(error);
         });
     });
