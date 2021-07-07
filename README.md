@@ -10,9 +10,10 @@ Currently, it provides a simple portal with the following remote capabilities
 
 **NOTE** You must be a Device Admin in your Webex Org for this to work.
 
-## Installation
+## Deployment
 
-1. Build and Deploy Docker Container (or deploy to Cloud)
+1. Register an Integration at [Webex Developers](https://developer.webex.com/my-apps) for your Organisation
+2. Build and Deploy Docker Container (or deploy to Cloud)
 
 Node command to create a secret - `node -e "console.log(crypto.randomBytes(32).toString('hex'))"`
 
@@ -23,12 +24,12 @@ Node command to create a secret - `node -e "console.log(crypto.randomBytes(32).t
   -e CLIENT_SECRET=client-secret-from-developer-dot-webex-dot-com \
   -e PUBLIC_URL=https-url-here-without-trailing-slash \
   -e SESSION_SECRET=please-change-me-to-a-session-secret \
-  -E STATE_SECRET=please-change-me-to-a-state-secret
+  -e STATE_SECRET=please-change-me-to-a-state-secret
   -e PORT=3000 roomos-portal
 ```
 
-2. Configure HTTPS Reverse Proxy or Direct Internet Connectivity for Public URL
-3. Connect to Public URL to access portal
+3. Configure HTTPS Reverse Proxy or Direct Internet Connectivity for Public URL
+4. Connect to Public URL to access portal
 
 ## Support
 
